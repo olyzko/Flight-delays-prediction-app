@@ -1,0 +1,53 @@
+<?php
+    $conn = pg_connect("host=localhost port=5432 dbname=airport user=postgres password=pass");
+?>
+<html>
+    <head>
+        <title>My Machine Learning App</title>
+    </head>
+
+    <body>
+        <form name="form", method="POST", style="text-align: center;">
+            <br>
+            Year: <input type="number" name="year" />
+            <br><br>
+            Month: <input type="number" name="month" />
+            <br><br>
+            Day of month: <input type="number" name="day_of_month" />
+            <br><br>
+            Departure airport:
+            <select name="dep_airport">
+                <option value=""></option>
+                {% for item in airports %}
+                    <option value="{{ item.ID }}">{{ item.NAME }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            Arrival airport:
+            <select name="arr_airport">
+                <option value=""></option>
+                {% for item in airports %}
+                    <option value="{{ item.ID }}">{{ item.NAME }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            Airline:
+            <select name="airline">
+                <option value=""></option>
+                {% for item in airlines %}
+                    <option value="{{ item.AIRLINE_NAME }}">{{ item.AIRLINE_NAME }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            Departure time: <input type="time" name="dep_time" required>
+            <br><br>
+            Arrival time: <input type="time" name="arr_time" required>
+            <br><br>
+            Departure delay (minutes): <input type="number" name="dep_delay" required>
+            <br><br>
+            <button value="Submit">Submit</button>
+        </form>
+        <p style="text-align: center;">{{ output }}</p>
+
+    </body>
+</html>
