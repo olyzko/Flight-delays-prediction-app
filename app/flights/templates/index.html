@@ -3,20 +3,17 @@
 ?>
 <html>
     <head>
-        <title>My Machine Learning App</title>
+        <title>Flight delay prediction</title>
+        <link rel="stylesheet" href="../static/css/style.css">
     </head>
 
     <body>
-        <form name="form", method="POST", style="text-align: center;">
+        <form name="form", action="/prediction", method="POST", style="text-align: center;">
             <br>
-            Year: <input type="number" name="year" />
-            <br><br>
-            Month: <input type="number" name="month" />
-            <br><br>
-            Day of month: <input type="number" name="day_of_month" />
+            Date of flight: <input type="date" name="date" required>
             <br><br>
             Departure airport:
-            <select name="dep_airport">
+            <select name="dep_airport" required>
                 <option value=""></option>
                 {% for item in airports %}
                     <option value="{{ item.ID }}">{{ item.NAME }}</option>
@@ -24,7 +21,7 @@
             </select>
             <br><br>
             Arrival airport:
-            <select name="arr_airport">
+            <select name="arr_airport" required>
                 <option value=""></option>
                 {% for item in airports %}
                     <option value="{{ item.ID }}">{{ item.NAME }}</option>
@@ -32,7 +29,7 @@
             </select>
             <br><br>
             Airline:
-            <select name="airline">
+            <select name="airline" required>
                 <option value=""></option>
                 {% for item in airlines %}
                     <option value="{{ item.AIRLINE_NAME }}">{{ item.AIRLINE_NAME }}</option>
@@ -47,7 +44,6 @@
             <br><br>
             <button value="Submit">Submit</button>
         </form>
-        <p style="text-align: center;">{{ output }}</p>
 
     </body>
 </html>

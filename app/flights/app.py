@@ -97,20 +97,26 @@ def find_time_block(time):
 
 
 @app.route('/', methods=['GET', 'POST'])
-def main():
+def home():
     airports = Airports.query.all()
     airlines = Airlines.query.all()
+    return render_template('index.html', airports=airports, airlines=airlines)
 
+
+@app.route('/prediction', methods=['POST'])
+def submit():
     # If a form is submitted
     if request.method == "POST":
 
         # Unpickle classifier
-        clf = pickle.load(open('xgb_clf_pkl', 'rb'))
+        clf = pickle.load(open('bin/xgb_clf_pkl', 'rb'))
+        reg = pickle.load(open('bin/xgb_reg_pkl', 'rb'))
 
         # Get values through input bars
-        year = request.form.get("year", type=int)
-        month = request.form.get("month", type=int)
-        day_of_month = request.form.get("day_of_month", type=int)
+        date = request.form.get("date")
+        year = int(date[:4])
+        month = int(date[5:7])
+        day_of_month = int(date[8:10])
         input_date = datetime.date(year, month, day_of_month)
         day_of_week = input_date.weekday() + 1
 
@@ -187,15 +193,17 @@ def main():
         flight[f'DEP_TIME_{dep_time_block}'] = 1
         flight[f'ARR_TIME_{arr_time_block}'] = 1
 
-        print(flight.columns)
-
         # Get prediction
-        prediction = clf.predict(flight)[0]
+        res = clf.predict(flight)[0]
+        if res == 0:
+            prediction = "Your flight will not be delayed"
+        if res == 1:
+            prediction = "Your flight will be delayed"
 
     else:
-        prediction = ""
+        prediction = "Error, please try again"
 
-    return render_template("index.html", output=prediction, airports=airports, airlines=airlines)
+    return render_template("prediction.html", output=prediction)
 
 
 if __name__ == '__main__':
